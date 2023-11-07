@@ -11,7 +11,7 @@ import { register, login, getMe } from './controllers/UserController.js';
 import handleValidationErrors from './utils/handleValidationErrors.js';
 
 mongoose
-    .connect('mongodb+srv://youzhnyfoto:Cfif1234@cluster0.ppu5twh.mongodb.net/?retryWrites=true&w=majority')
+    .connect(process.env.MONGODB_URL)
     .then(() => console.log('db ok'))
     .catch((err) => console.log('db error', err));
 
@@ -59,7 +59,7 @@ app.post('/posts', checkAuth, postCreateValidator, handleValidationErrors, creat
 app.patch('/posts/:id', checkAuth, postCreateValidator, handleValidationErrors, update);
 app.delete('/posts/:id', checkAuth, removeOne);
 
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
     if (err) {
         return console.log(err);
     }
