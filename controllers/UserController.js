@@ -10,7 +10,7 @@ export const register = async (req, res) => {
         const hash = await bcrypt.hash(password, salt);
 
         const doc = new UserSchema({
-            name: req.body.name,
+            fullName: req.body.fullName,
             email: req.body.email,
             passwordHash: hash,
             avatarUrl: req.body.avatarUrl,

@@ -45,20 +45,22 @@ export const getOne = async (req, res) => {
             {
                 returnDocument: 'after',
             },
-        ).then((doc, err) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).json({
-                    message: 'Failed to return the article',
-                });
-            }
-            if (!doc) {
-                return res.status(404).json({
-                    message: 'The article not found',
-                });
-            }
-            res.json(doc);
-        });
+        )
+            .populate('user')
+            .then((doc, err) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({
+                        message: 'Failed to return the article',
+                    });
+                }
+                if (!doc) {
+                    return res.status(404).json({
+                        message: 'The article not found',
+                    });
+                }
+                res.json(doc);
+            });
     } catch (err) {
         console.log(err);
         res.status(500).json({
@@ -73,7 +75,7 @@ export const create = async (req, res) => {
             title: req.body.title,
             text: req.body.text,
             imageUrl: req.body.imageUrl,
-            tags: req.body.tags,
+            tags: req.body.tags.split(','),
             user: req.userId,
         });
 
@@ -91,7 +93,7 @@ export const update = async (req, res) => {
     try {
         const postId = req.params.id;
 
-        await PostSchema.findOneAndDelete(
+        await PostSchema.updateOne(
             {
                 _id: postId,
             },
