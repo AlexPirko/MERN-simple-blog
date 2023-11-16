@@ -3,10 +3,22 @@ import cors from 'cors';
 import fs from 'fs';
 import multer from 'multer';
 import mongoose from 'mongoose';
-import { loginValidator, postCreateValidator, registerValidator } from './validations/validations.js';
+import {
+    loginValidator,
+    postCreateValidator,
+    registerValidator,
+} from './validations/validations.js';
 
 import checkAuth from './utils/checkAuth.js';
-import { getAll, getLastTags, getOne, create, update, removeOne } from './controllers/PostController.js';
+import {
+    getAll,
+    getAllPopular,
+    getLastTags,
+    getOne,
+    create,
+    update,
+    removeOne,
+} from './controllers/PostController.js';
 import { register, login, getMe } from './controllers/UserController.js';
 import handleValidationErrors from './utils/handleValidationErrors.js';
 
@@ -56,10 +68,23 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
 app.get('/tags', getLastTags);
 
 app.get('/posts', getAll);
+app.get('/popular', getAllPopular);
 app.get('/posts/tags', getLastTags);
 app.get('/posts/:id', getOne);
-app.post('/posts', checkAuth, postCreateValidator, handleValidationErrors, create);
-app.patch('/posts/:id', checkAuth, postCreateValidator, handleValidationErrors, update);
+app.post(
+    '/posts',
+    checkAuth,
+    postCreateValidator,
+    handleValidationErrors,
+    create,
+);
+app.patch(
+    '/posts/:id',
+    checkAuth,
+    postCreateValidator,
+    handleValidationErrors,
+    update,
+);
 app.delete('/posts/:id', checkAuth, removeOne);
 
 app.listen(process.env.PORT || 4444, (err) => {
